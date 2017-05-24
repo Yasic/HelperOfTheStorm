@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">风暴英雄助手</string>
+    
+    <string name="hero_list_fragment_title">时空枢纽</string>
+    <string name="leader_boarder_fragment_title">排行榜</string>
+    <string name="more_fragment_title">更多</string>
+    <string name="hero_detail_information">英雄详情</string>
+    <string name="talent_tree_fragment_title">天赋树</string>
+
+    <string name="warrior">战斗</string>
+    <string name="assassin">刺杀</string>
+    <string name="support">辅助</string>
+    <string name="specialist">专业</string>
+    <string name="unknown_role">位置</string>
+
+    <string name="sthp">初始血量</string>
+    <string name="stat">初始攻击伤害</string>
+    <string name="stsi">初始攻城伤害</string>
+    <string name="tehp">20级血量</string>
+    <string name="teat">20级攻击伤害</string>
+    <string name="tesi">20级攻城伤害</string>
+    <string name="atfre">攻击频率</string>
+    <string name="atra">攻击范围</string>
+
+    <string name="about_activity_title">关于</string>
+    <string name="feedback_activity_title">意见与反馈</string>
+
+    <string name="form_app_version">app_version</string>
+    <string name="form_os_version">os_version</string>
+    <string name="form_android_version">android_version</string>
+    <string name="form_feedback">feedback</string>
+    <string name="form_connect">connect</string>
+</resources>
