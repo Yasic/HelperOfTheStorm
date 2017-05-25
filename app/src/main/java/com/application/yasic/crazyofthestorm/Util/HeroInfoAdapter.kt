@@ -261,14 +261,14 @@ class HeroInfoAdapter(val items: List<JsonObject>) : RecyclerView.Adapter<Recycl
 
             heroInfoLv.text = "LV1"
             hpTextView.text = HeroDataModel().getHPText(heroJson) + "："
-            hpRecoveryText.text = HeroDataModel().getHPRecoveryText(heroJson)
+            hpRecoveryText.text = HeroDataModel().getHPRecoveryText(heroJson) + "："
             mpTextView.text = HeroDataModel().getMPText(heroJson) + "："
-            mpRecoveryView.text = HeroDataModel().getMPRecoveryText(heroJson)
+            mpRecoveryView.text = HeroDataModel().getMPRecoveryText(heroJson) + "："
 
             hpValue.text = HeroDataModel().getHPValue(heroJson, 1)
-            hpRecoveryValue.text = HeroDataModel().getHPRecoveryValue(heroJson, 1) + "："
+            hpRecoveryValue.text = HeroDataModel().getHPRecoveryValue(heroJson, 1)
             mpValue.text = HeroDataModel().getMPValue(heroJson, 1)
-            mpRecoveryValue.text = HeroDataModel().getMPRecoveryValue(heroJson, 1) + "："
+            mpRecoveryValue.text = HeroDataModel().getMPRecoveryValue(heroJson, 1)
             attackValue.text = HeroDataModel().getAttackValue(heroJson, 1)
             siegeValue.text = HeroDataModel().getSiegeValue(heroJson, 1)
 

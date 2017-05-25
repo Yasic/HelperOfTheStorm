@@ -38,6 +38,11 @@ class NetworkModel() {
         return JsonParser().parse(response).asJsonArray
     }
 
+    fun getPopularBoardAsJson(): JsonObject{
+        val response = WannaGet("fetchdata").run()
+        return JsonParser().parse(response).asJsonObject
+    }
+
     fun getAboutText(): String {
         val response = WannaGet("heroapp/about").run()
         return response

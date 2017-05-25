@@ -29,7 +29,7 @@ class LeaderBoardPrimaryAdapter(val items: Array<String>, val itemClick: OnItemC
     }
 
     class ViewHolder(val view: View, val itemClick: OnItemClickListener): RecyclerView.ViewHolder(view){
-        private val typeArray = arrayOf("sthp", "stat", "stsi", "tehp", "teat", "tesi", "atfre", "atra")
+        private val typeArray = arrayOf("popular", "sthp", "stat", "stsi", "tehp", "teat", "tesi", "atfre", "atra")
         private val titleView: TextView
         private val liItemView: LinearLayout
 

@@ -1,5 +1,7 @@
 package com.application.yasic.crazyofthestorm.Util
 
+import android.content.Context
+import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -13,9 +15,9 @@ import com.google.gson.JsonObject
 import org.jetbrains.anko.find
 
 
-class LeaderBoardSubAdapter(val items: JsonArray, val itemClick: OnItemClickListener): RecyclerView.Adapter<LeaderBoardSubAdapter.ViewHolder>(){
+class LeaderBoardSubAdapter(val items: JsonArray, val itemClick: OnItemClickListener, val context: Context): RecyclerView.Adapter<LeaderBoardSubAdapter.ViewHolder>(){
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindView(items.get(position).asJsonObject, position)
+        holder.bindView(items.get(position).asJsonObject, position, context)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -39,7 +41,16 @@ class LeaderBoardSubAdapter(val items: JsonArray, val itemClick: OnItemClickList
             liItem = view.find(R.id.li_leader_board_item)
         }
 
-        fun bindView(item: JsonObject, position: Int){
+        fun bindView(item: JsonObject, position: Int, context: Context){
+            if (position < 3){
+                index.setTextColor(context.resources.getColor(R.color.colorAccent))
+                heroName.setTextColor(context.resources.getColor(R.color.colorAccent))
+                value.setTextColor(context.resources.getColor(R.color.colorAccent))
+            }else{
+                index.setTextColor(context.resources.getColor(R.color.colorAccentWhite))
+                heroName.setTextColor(context.resources.getColor(R.color.colorAccentWhite))
+                value.setTextColor(context.resources.getColor(R.color.colorAccentWhite))
+            }
             index.text = (position+1).toString()
             heroName.text = item.get("heroName").asString
             liItem.setOnClickListener { itemClick(item.get("heroId").asString, item.get("heroName").asString) }

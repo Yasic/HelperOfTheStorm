@@ -33,7 +33,8 @@ class LeaderBoardFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rv_leader_board.layoutManager = LinearLayoutManager(activity)
-        val titleList = arrayOf(activity.resources.getString(R.string.sthp),
+        val titleList = arrayOf(activity.resources.getString(R.string.popular),
+                activity.resources.getString(R.string.sthp),
                 activity.resources.getString(R.string.stat),
                 activity.resources.getString(R.string.stsi),
                 activity.resources.getString(R.string.tehp),

@@ -21,6 +21,7 @@
     <string name="tesi">20级攻城伤害</string>
     <string name="atfre">攻击频率</string>
     <string name="atra">攻击范围</string>
+    <string name="popular">人气</string>
 
     <string name="about_activity_title">关于</string>
     <string name="feedback_activity_title">意见与反馈</string>
