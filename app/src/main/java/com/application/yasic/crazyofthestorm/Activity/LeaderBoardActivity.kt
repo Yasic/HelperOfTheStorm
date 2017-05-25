@@ -85,6 +85,7 @@ class LeaderBoardActivity() : AppCompatActivity() {
         val compare: Comparator<Pair<String, Float>> = Comparator { t1, t2 -> (t2.second * 1000 - t1.second * 1000).toInt() }
         val list = heroListOfMap.sortedWith(compare)
         list.forEach {
+
             var hero = JsonObject()
             hero.add("heroId", Gson().fromJson(it.first, JsonElement::class.java))
             hero.add("heroName", Gson().fromJson(getHeroName(heroList, it.first), JsonElement::class.java))
