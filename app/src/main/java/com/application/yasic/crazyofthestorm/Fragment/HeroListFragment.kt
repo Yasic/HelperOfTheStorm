@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.annotation.Nullable
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -43,7 +44,7 @@ class HeroListFragment : Fragment() {
         setHeroListView()
         setFilterButton()
 
-        srl_refresh.setColorScheme(R.color.colorPrimaryDark, R.color.colorAccent, R.color.colorPrimaryBlue)
+        srl_refresh.setColorScheme(R.color.colorPrimary, R.color.colorAccent, R.color.colorPrimaryBlue)
         srl_refresh.setOnRefreshListener {
             heroListFinished = true
             setRoleButtonBackground(4)

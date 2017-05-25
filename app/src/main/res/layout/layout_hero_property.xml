@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="16dp"
                 android:text="0"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorGreen"
                 android:textSize="@dimen/hero_info_primary_text"/>
         </LinearLayout>
 
@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="16dp"
                 android:text="0"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorGreen"
                 android:textSize="@dimen/hero_info_primary_text"/>
         </LinearLayout>
     </LinearLayout>

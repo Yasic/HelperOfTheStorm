@@ -10,4 +10,6 @@
     <dimen name="hero_info_subtitle_text">16sp</dimen>
     <dimen name="hero_info_primary_text">14sp</dimen>
     <dimen name="hero_info_secondary_text">12sp</dimen>
+
+    <dimen name="list_item_margin_top">12dp</dimen>
 </resources>
