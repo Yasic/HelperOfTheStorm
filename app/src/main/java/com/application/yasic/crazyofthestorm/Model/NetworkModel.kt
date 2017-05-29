@@ -2,6 +2,7 @@ package com.application.yasic.crazyofthestorm.Model
 
 import android.content.Context
 import android.util.Log
+import android.widget.ImageView
 import com.application.yasic.crazyofthestorm.Object.SimpleHeroItem
 import com.application.yasic.crazyofthestorm.R
 import com.application.yasic.crazyofthestorm.Util.WannaGet
@@ -9,10 +10,8 @@ import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import okhttp3.FormBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
+import com.squareup.picasso.Picasso
+import okhttp3.*
 
 class NetworkModel() {
 
@@ -58,5 +57,13 @@ class NetworkModel() {
         val request = Request.Builder().url(WannaGet.htap() + "heroapp/feedback").post(body).build()
         val response = okHttpClient.newCall(request).execute()
         return response.body()!!.string()
+    }
+
+    fun loadImage(view: ImageView, url: String){
+        if (RepositoryModel().isImageEnable()){
+            Picasso.with(view.context).load(url).into(view)
+        } else {
+            Picasso.with(view.context).load(R.drawable.icon_holder).into(view)
+        }
     }
 }

@@ -11,11 +11,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.application.yasic.crazyofthestorm.Model.NetworkModel
 import com.application.yasic.crazyofthestorm.R
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.talent_tree_item.*
 import org.jetbrains.anko.find
@@ -96,7 +98,7 @@ class HeroTalentAdapter(val items: List<JsonObject>) : RecyclerView.Adapter<Hero
                     talentType.text = talentArray.get(select).asJsonObject.get("active").asString
                     talentCD.text = talentArray.get(select).asJsonObject.get("talent-cd").asString
                     talentDescription.text = talentArray.get(select).asJsonObject.get("description").asString
-                    Picasso.with(talentViewArray[index].context).load(WannaGet.htap() + "herotalent/$heroId/$talentLV/" + item.asJsonObject.get("title").asString).into(talentViewArray[index])
+                    NetworkModel().loadImage(talentViewArray[index], WannaGet.htap() + "herotalent/$heroId/$talentLV/" + item.asJsonObject.get("title").asString)
 
                     talentLinearViewArray[index].setOnClickListener {
                         if (select != index){

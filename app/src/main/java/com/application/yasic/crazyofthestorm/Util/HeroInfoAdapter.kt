@@ -104,7 +104,7 @@ class HeroInfoAdapter(val items: List<JsonObject>) : RecyclerView.Adapter<Recycl
         fun bindView(heroTraitJson: JsonObject) {
             val heroId = heroTraitJson.get("id").asString.replace("\"", "")
             val abilityTitle = heroTraitJson.get("title").asString.replace("\"", "")
-            com.squareup.picasso.Picasso.with(iconView.context).load(WannaGet.htap() + "heroicability/$heroId/$abilityTitle").into(iconView)
+            NetworkModel().loadImage(iconView, WannaGet.htap() + "heroicability/$heroId/$abilityTitle")
             titleView.text = abilityTitle
             costView.text = if (heroTraitJson.get("skill-cost").isJsonNull) "N/A" else heroTraitJson.get("skill-cost").asString
             shortCutView.text = if (heroTraitJson.get("skill-shortcut").isJsonNull) "N/A" else heroTraitJson.get("skill-shortcut").asString
@@ -135,7 +135,7 @@ class HeroInfoAdapter(val items: List<JsonObject>) : RecyclerView.Adapter<Recycl
         fun bindView(heroTraitJson: JsonObject) {
             val heroId = heroTraitJson.get("id").asString.replace("\"", "")
             val abilityTitle = heroTraitJson.get("title").asString.replace("\"", "")
-            com.squareup.picasso.Picasso.with(iconView.context).load(WannaGet.htap() +  "startingability/$heroId/$abilityTitle").into(iconView)
+            NetworkModel().loadImage(iconView, WannaGet.htap() +  "startingability/$heroId/$abilityTitle")
             titleView.text = abilityTitle
             costView.text = if (!heroTraitJson.has("skill-cost") || heroTraitJson.get("skill-cost").isJsonNull) "N/A" else heroTraitJson.get("skill-cost").asString
             shortCutView.text = if (heroTraitJson.get("skill-shortcut").isJsonNull) "N/A" else heroTraitJson.get("skill-shortcut").asString
@@ -166,7 +166,7 @@ class HeroInfoAdapter(val items: List<JsonObject>) : RecyclerView.Adapter<Recycl
         fun bindView(heroTraitJson: JsonObject) {
             val heroId = heroTraitJson.get("id").asString.replace("\"", "")
             val traitTitle = heroTraitJson.get("title").asString.replace("\"", "")
-            com.squareup.picasso.Picasso.with(iconView.context).load(WannaGet.htap() + "herotrait/$heroId/$traitTitle").into(iconView)
+            NetworkModel().loadImage(iconView, WannaGet.htap() + "herotrait/$heroId/$traitTitle")
             titleView.text = traitTitle
             costView.text = if (heroTraitJson.get("cost").isJsonNull) "N/A" else heroTraitJson.get("cost").asString
             shortCutView.text = if (heroTraitJson.get("shortcut").isJsonNull) "N/A" else heroTraitJson.get("shortcut").asString
@@ -254,7 +254,7 @@ class HeroInfoAdapter(val items: List<JsonObject>) : RecyclerView.Adapter<Recycl
                     }
                 }
             }
-            Picasso.with(heroInfoIcon.context).load(WannaGet.htap() + "heroicon/" + HeroDataModel().getHeroId(heroJson)).into(heroInfoIcon)
+            NetworkModel().loadImage(heroInfoIcon, WannaGet.htap() + "heroicon/" + HeroDataModel().getHeroId(heroJson))
             heroInfoName.text = HeroDataModel().getHeroName(heroJson) + HeroDataModel().getHeroTitle(heroJson)
             heroInfoRole.text = HeroDataModel().getHeroRole(heroJson)
             heroInfoStory.text = HeroDataModel().getHeroDescription(heroJson)

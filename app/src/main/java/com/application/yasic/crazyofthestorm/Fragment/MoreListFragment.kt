@@ -27,6 +27,7 @@ class MoreListFragment() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         rv_more_list.layoutManager = LinearLayoutManager(activity)
         val titleList = arrayOf(
+                activity.resources.getString(R.string.image_enable_switch),
                 activity.resources.getString(R.string.feedback_activity_title),
                 activity.resources.getString(R.string.about_activity_title)
         )

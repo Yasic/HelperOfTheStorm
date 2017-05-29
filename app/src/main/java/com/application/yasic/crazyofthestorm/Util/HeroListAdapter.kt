@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.application.yasic.crazyofthestorm.Model.NetworkModel
 import com.application.yasic.crazyofthestorm.Object.SimpleHeroItem
 import com.application.yasic.crazyofthestorm.R
 import com.squareup.picasso.Picasso
@@ -42,7 +43,7 @@ class HeroListAdapter(val items: List<SimpleHeroItem>, val	itemClick: OnItemClic
 
         fun bindSimpleHero(simpleHeroItem: SimpleHeroItem, context: Context){
             with(simpleHeroItem){
-                Picasso.with(itemView.context).load(WannaGet.htap() + "heroicon/" + id).into(iconView)
+                NetworkModel().loadImage(iconView, WannaGet.htap() + "heroicon/" + id)
                 nameView.text = name
                 when(role[0].toString() + role[1].toString()){
                     "wa" -> roleView.text = context.resources.getString(R.string.warrior)

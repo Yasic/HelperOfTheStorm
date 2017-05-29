@@ -18,7 +18,6 @@ import com.application.yasic.crazyofthestorm.Object.HeroTrait
 import com.application.yasic.crazyofthestorm.Object.SimpleHeroItem
 import com.application.yasic.crazyofthestorm.R
 import com.application.yasic.crazyofthestorm.Util.HeroInfoAdapter
-import com.application.yasic.crazyofthestorm.Util.HeroTraitAdapter
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject

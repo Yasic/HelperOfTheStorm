@@ -25,6 +25,7 @@
 
     <string name="about_activity_title">关于</string>
     <string name="feedback_activity_title">意见与反馈</string>
+    <string name="image_enable_switch">图片加载开关</string>
 
     <string name="form_app_version">app_version</string>
     <string name="form_os_version">os_version</string>
