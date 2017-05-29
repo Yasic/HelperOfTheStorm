@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import com.application.yasic.crazyofthestorm.Model.NetworkModel
 import com.application.yasic.crazyofthestorm.Object.SimpleHeroItem
@@ -25,6 +28,9 @@ import java.util.*
 import kotlin.comparisons.compareBy
 
 class LeaderBoardActivity() : AppCompatActivity() {
+    var isDataReady = false
+    var jsonArray = JsonArray()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val titleMap = mapOf<String, String>(
                 Pair("sthp", resources.getString(R.string.sthp)),
@@ -45,12 +51,12 @@ class LeaderBoardActivity() : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         doAsync {
-            var jsonArray = JsonArray()
             if (tag == "popular") {
                 jsonArray = getPopularJsonArray()
             } else {
                 jsonArray = NetworkModel().getLeaderBoardAsJson(tag)
             }
+            isDataReady = true
             uiThread {
                 view_loading.visibility = View.GONE
                 rv_leader_board_sub_list.layoutManager = LinearLayoutManager(this@LeaderBoardActivity)
@@ -66,6 +72,39 @@ class LeaderBoardActivity() : AppCompatActivity() {
                 }, this@LeaderBoardActivity)
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.leader_boarder_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.changeListOrder) {
+            if (!isDataReady){
+                toast("排行榜正在计算中")
+            }else{
+                val tempJsonArray = JsonArray()
+                val length = jsonArray.size()
+                for(i in 0..length - 1){
+                    tempJsonArray.add(JsonObject())
+                }
+                jsonArray.forEachIndexed {
+                    index, item ->
+                    run {
+                        tempJsonArray[jsonArray.size() - 1 - index] = item
+                    }
+                }
+                for(i in 0..length - 1){
+                    jsonArray.remove(0)
+                }
+                tempJsonArray.forEach{
+                    jsonArray.add(it)
+                }
+                rv_leader_board_sub_list.adapter.notifyDataSetChanged()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun getPopularJsonArray(): JsonArray {
@@ -95,10 +134,10 @@ class LeaderBoardActivity() : AppCompatActivity() {
         return jsonArray
     }
 
-    private fun getHeroName(heroList: MutableList<SimpleHeroItem>, id: String): String{
+    private fun getHeroName(heroList: MutableList<SimpleHeroItem>, id: String): String {
         var name = ""
-        heroList.forEach{
-            if (it.id == id){
+        heroList.forEach {
+            if (it.id == id) {
                 name = it.name
                 return name
             }
