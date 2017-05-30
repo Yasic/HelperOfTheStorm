@@ -17,4 +17,9 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="FeedbackEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/colorAccentWhite</item>
+        <item name="colorControlActivated">@color/colorAccent</item>
+    </style>
+
 </resources>

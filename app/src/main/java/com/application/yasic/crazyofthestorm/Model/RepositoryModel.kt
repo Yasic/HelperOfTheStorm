@@ -14,7 +14,7 @@ class RepositoryModel(){
     }
 
     fun isImageEnable(): Boolean{
-        return imageSharedPreference.getBoolean("enable", false)
+        return imageSharedPreference.getBoolean("enable", true)
     }
 
     fun setImageEnable(isEnabled: Boolean){
