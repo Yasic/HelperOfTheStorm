@@ -41,9 +41,11 @@ class HeroDisplayActivity : AppCompatActivity(){
                 val tabTitleList = mutableListOf<String>()
                 tabTitleList.add(heroName)
                 tabTitleList.add(resources.getString(R.string.talent_tree_fragment_title))
+
                 val fragmentList = mutableListOf<Fragment>()
                 fragmentList.add(HeroInfoFragment())
                 fragmentList.add(HeroTalentTreeFragment())
+
                 vp_hero_display.adapter = ViewPagerAdapter(supportFragmentManager, tabTitleList, fragmentList)
                 vp_hero_display.offscreenPageLimit = 2
                 tl_hero_display_bottomBar.setupWithViewPager(vp_hero_display)

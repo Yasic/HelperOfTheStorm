@@ -1,6 +1,5 @@
 package com.application.yasic.crazyofthestorm.Activity
 
-import android.net.Network
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.application.yasic.crazyofthestorm.Model.NetworkModel

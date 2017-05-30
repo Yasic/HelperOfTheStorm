@@ -34,6 +34,8 @@ class HeroInfoFragment() : Fragment() {
     var heroId: String = ""
     var heroName: String = ""
     var heroInfoReady = false
+    val heroInfoList = mutableListOf<JsonObject>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -49,41 +51,57 @@ class HeroInfoFragment() : Fragment() {
         val heroJson = (activity as HeroDisplayActivity).getHeroJson()
         heroInfoReady = true
 
-        val heroInfoList = mutableListOf<JsonObject>()
+        addHeaderJson(heroJson)
+        addHeroTrait(heroJson)
+        addStartingAbilityText()
+        addStartingAbility(heroJson)
+        addHeroicAbilityText()
+        addHeroicAbility(heroJson)
 
+        rv_hero_info.layoutManager = LinearLayoutManager(activity)
+        rv_hero_info.adapter = HeroInfoAdapter(heroInfoList)
+    }
+
+    private fun addHeaderJson(heroJson: JsonObject){
         val headerTextJson = heroJson
         headerTextJson.add("itemViewType", Gson().fromJson(HeroInfoAdapter.HEADERTEXT.toString(), JsonElement::class.java))
         heroInfoList.add(headerTextJson)
+    }
 
-
+    private fun addHeroTrait(heroJson: JsonObject){
         for (item in HeroDataModel().getHeroTrait(heroJson)) {
             val traitItem: JsonObject = item as JsonObject
             traitItem.add("itemViewType", Gson().fromJson(HeroInfoAdapter.TRAIT.toString(), JsonElement::class.java))
             traitItem.add("id", Gson().fromJson(heroId, JsonElement::class.java))
             heroInfoList.add(traitItem)
         }
+    }
 
+    private fun addStartingAbilityText() {
         val startingAbilityText = JsonObject()
         startingAbilityText.add("itemViewType", Gson().fromJson(HeroInfoAdapter.STARTINGABILITYTEXT.toString(), JsonElement::class.java))
         heroInfoList.add(startingAbilityText)
+    }
 
+    private fun addStartingAbility(heroJson: JsonObject){
         for (item in HeroDataModel().getHeroStartingAbility(heroJson)) {
             (item as JsonObject).add("itemViewType", Gson().fromJson(HeroInfoAdapter.STARTINGABILITY.toString(), JsonElement::class.java))
             item.add("id", Gson().fromJson(heroId, JsonElement::class.java))
             heroInfoList.add(item)
         }
+    }
 
+    private fun addHeroicAbilityText(){
         val heroicAbilityText = JsonObject()
-        heroicAbilityText.add("itemViewType", Gson().fromJson(HeroInfoAdapter.HORICABILITYTEXT.toString(), JsonElement::class.java))
+        heroicAbilityText.add("itemViewType", Gson().fromJson(HeroInfoAdapter.HEROICABILITYTEXT.toString(), JsonElement::class.java))
         heroInfoList.add(heroicAbilityText)
+    }
 
+    private fun addHeroicAbility(heroJson: JsonObject) {
         for (item in HeroDataModel().getHeroicAbility(heroJson)) {
-            (item as JsonObject).add("itemViewType", Gson().fromJson(HeroInfoAdapter.HORICABILITY.toString(), JsonElement::class.java))
+            (item as JsonObject).add("itemViewType", Gson().fromJson(HeroInfoAdapter.HEROICABILITY.toString(), JsonElement::class.java))
             item.add("id", Gson().fromJson(heroId, JsonElement::class.java))
             heroInfoList.add(item)
         }
-
-        rv_hero_info.layoutManager = LinearLayoutManager(activity)
-        rv_hero_info.adapter = HeroInfoAdapter(heroInfoList)
     }
 }

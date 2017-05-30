@@ -29,8 +29,8 @@ class HeroInfoAdapter(val items: List<JsonObject>) : RecyclerView.Adapter<Recycl
         val TRAIT = 2
         val STARTINGABILITYTEXT = 3
         val STARTINGABILITY = 4
-        val HORICABILITYTEXT = 5
-        val HORICABILITY = 6
+        val HEROICABILITYTEXT = 5
+        val HEROICABILITY = 6
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -47,10 +47,10 @@ class HeroInfoAdapter(val items: List<JsonObject>) : RecyclerView.Adapter<Recycl
             STARTINGABILITY -> {
                 return StartingAbilityViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.hero_trait_item, parent, false))
             }
-            HORICABILITYTEXT -> {
+            HEROICABILITYTEXT -> {
                 return HeroicAbilityTextViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.heroic_ability_text_item, parent, false))
             }
-            HORICABILITY -> {
+            HEROICABILITY -> {
                 return HeroicAbilityViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.hero_trait_item, parent, false))
             }
             else -> {

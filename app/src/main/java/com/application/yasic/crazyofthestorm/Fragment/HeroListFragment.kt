@@ -5,14 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.Nullable
 import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.GridLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.ImageButton
 import com.application.yasic.crazyofthestorm.Activity.HeroDisplayActivity
 import com.application.yasic.crazyofthestorm.Activity.MainActivity
 import com.application.yasic.crazyofthestorm.Model.NetworkModel
@@ -21,16 +18,38 @@ import com.application.yasic.crazyofthestorm.Object.SimpleHeroItem
 import com.application.yasic.crazyofthestorm.R
 import kotlinx.android.synthetic.main.fragment_hero_list.*
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.longToast
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
 class HeroListFragment : Fragment() {
-    private var heroListFinished = false
-    private var selectRolePosition = 4
-    private var selectGamePosition = 5
+    private var heroListLoadFinished = false
+    private var roleFilterType = ALLROLE
+    private var gameFilterType = ALLGAME
     private var showHeroList: MutableList<SimpleHeroItem> = mutableListOf()
     private var heroList: MutableList<SimpleHeroItem> = mutableListOf()
+
+    var gameButtonMap = mapOf<String, ImageButton>()
+
+    var roleButtonMap = mapOf<String, ImageButton>()
+
+    companion object{
+        private val ROLEBUTTON = 0
+        private val GAMEBUTTON = 1
+
+        private val WARCRAFT = "wo"
+        private val DIABLO = "d3"
+        private val OVERWATCH = "ow"
+        private val STARCRAFT = "sc"
+        private val OTHER = "ot"
+        private val ALLGAME = "al"
+
+        private val WARRIOR = "wa"
+        private val ASSASSIN = "as"
+        private val SUPPORT = "su"
+        private val SPECIALIST = "sp"
+        private val ALLROLE = "al"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -41,14 +60,25 @@ class HeroListFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHeroListView()
-        setFilterButton()
+        gameButtonMap = mapOf<String, ImageButton>(Pair(WARCRAFT, ib_warcraft),
+                Pair(OVERWATCH, ib_overwatch),
+                Pair(STARCRAFT, ib_starcraft),
+                Pair(DIABLO, ib_diablo),
+                Pair(OTHER, ib_retro))
+        roleButtonMap = mapOf<String, ImageButton>(Pair(WARRIOR, ib_warrior),
+                Pair(ASSASSIN, ib_assassin),
+                Pair(SPECIALIST, ib_specialist),
+                Pair(SUPPORT, ib_support))
 
-        srl_refresh.setColorScheme(R.color.colorPrimary, R.color.colorAccent, R.color.colorPrimaryBlue)
+        heroList = (activity as MainActivity).getHeroListJson()
+        initHeroListView(heroList)
+        setFilterButtonClickEvent()
+
+        srl_refresh.setColorScheme(R.color.colorPrimary, R.color.colorAccent, R.color.colorGreen)
         srl_refresh.setOnRefreshListener {
-            heroListFinished = true
-            setRoleButtonBackground(4)
-            setGameButtonBackground(5)
+            heroListLoadFinished = true
+            clearRoleButtonBackground()
+            clearGameButtonBackground()
             disableFilterButtons()
             showHeroList.clear()
             doAsync {
@@ -65,12 +95,11 @@ class HeroListFragment : Fragment() {
         }
     }
 
-    private fun setHeroListView() {
-        heroList = (activity as MainActivity).getHeroListJson()
+    private fun initHeroListView(heroList: MutableList<SimpleHeroItem>) {
         heroList.forEach {
             showHeroList.add(it)
         }
-        heroListFinished = true
+        heroListLoadFinished = true
         hero_list_view.layoutManager = GridLayoutManager(activity, 4)
         hero_list_view.adapter = HeroListAdapter(showHeroList, object : HeroListAdapter.OnItemClickListener {
             override fun invoke(simpleHeroItem: SimpleHeroItem) {
@@ -84,52 +113,51 @@ class HeroListFragment : Fragment() {
         }, activity)
     }
 
-    private fun setFilterButton() {
+    private fun setFilterButtonClickEvent() {
         setRoleFilter()
         setGameFilter()
     }
 
     private fun setRoleFilter() {
-        val roleButtons = arrayOf(ib_warrior, ib_assassin, ib_specialist, ib_support)
-        roleButtons.forEachIndexed{
-            index, button -> run{
-            button.setOnClickListener { changeHeroList(0, rolePosition = index) }
-        }
+        roleButtonMap.forEach{
+            val tag = it.key
+            it.value.setOnClickListener { filterHeroList(ROLEBUTTON, tag) }
         }
     }
 
     private fun setGameFilter() {
-        val gameButtons = arrayOf(ib_warcraft, ib_diablo, ib_overwatch, ib_starcraft, ib_retro)
-        gameButtons.forEachIndexed{
-            index, button -> run{
-            button.setOnClickListener {
-                changeHeroList(1, gamePosition = index) }
-        }
+        gameButtonMap.forEach{
+            val tag = it.key
+            it.value.setOnClickListener { filterHeroList(GAMEBUTTON, tag) }
         }
     }
 
-    private fun changeHeroList(click: Int, rolePosition: Int = selectRolePosition, gamePosition: Int = selectGamePosition) {
-        val checkRoleFlags = arrayOf("wa", "as", "sp", "su", "all")
-        val checkGameFlags = arrayOf("wo", "d3", "ow", "sc", "ot")
-        if (!heroListFinished) {
+    private fun filterHeroList(clickType: Int, clickItemType: String){
+        if (!heroListLoadFinished) {
             activity.toast("英雄还在路上")
             return
         }
-        if (click == 0) {
-            selectRolePosition = if (selectRolePosition === rolePosition) 4 else rolePosition
-            setRoleButtonBackground(selectRolePosition)
-        } else {
-            selectGamePosition = if (selectGamePosition === gamePosition) 5 else gamePosition
-            setGameButtonBackground(selectGamePosition)
+        if (clickType == ROLEBUTTON){
+            roleFilterType = if (roleFilterType == clickItemType) ALLROLE else clickItemType
+            clearRoleButtonBackground()
+            if (roleFilterType != ALLROLE){
+                setRoleButtonActiveBackground(roleFilterType)
+            }
+        } else{
+            gameFilterType = if (gameFilterType == clickItemType) ALLGAME else clickItemType
+            clearGameButtonBackground()
+            if (gameFilterType != ALLGAME){
+                setGameButtonActiveBackground(gameFilterType)
+            }
         }
-
 
         showHeroList.clear()
         heroList.forEach {
             val checkRoleFlag = it.role[0].toString() + it.role[1]
-            var checkGameFlag = it.game[0].toString() + it.game[1]
-            if (selectRolePosition == 4 || checkRoleFlag == checkRoleFlags[rolePosition]) {
-                if (selectGamePosition == 5 || checkGameFlag == checkGameFlags[gamePosition]) {
+            val checkGameFlag = it.game[0].toString() + it.game[1]
+
+            if (roleFilterType == ALLROLE || checkRoleFlag == roleFilterType){
+                if (gameFilterType == ALLGAME || checkGameFlag == gameFilterType){
                     showHeroList.add(it)
                 }
             }
@@ -137,65 +165,59 @@ class HeroListFragment : Fragment() {
         hero_list_view.adapter.notifyDataSetChanged()
     }
 
-    private fun enableFilterButtons(){
-        val gameButtons = arrayOf(ib_warcraft, ib_diablo, ib_overwatch, ib_starcraft, ib_retro)
-        val roleButtons = arrayOf(ib_warrior, ib_assassin, ib_specialist, ib_support)
-        gameButtons.forEach{
-            it.isClickable = true
+    private fun clearRoleButtonBackground(){
+        val roleDrawableOffMap = mapOf(Pair(WARRIOR, R.drawable.main_view_btn_warrior_off),
+                Pair(ASSASSIN, R.drawable.main_view_btn_assassin_off),
+                Pair(SPECIALIST, R.drawable.main_view_btn_specialist_off),
+                Pair(SUPPORT, R.drawable.main_view_btn_support_off))
+        roleButtonMap.forEach{
+            it.value.setBackgroundResource(roleDrawableOffMap[it.key]!!)
         }
-        roleButtons.forEach{
-            it.isClickable = true
+    }
+
+    private fun setRoleButtonActiveBackground(roleFilterType: String) {
+        val roleDrawableOnMap = mapOf(Pair(WARRIOR, R.drawable.main_view_btn_warrior_on),
+                Pair(ASSASSIN, R.drawable.main_view_btn_assassin_on),
+                Pair(SPECIALIST, R.drawable.main_view_btn_specialist_on),
+                Pair(SUPPORT, R.drawable.main_view_btn_support_on))
+        roleButtonMap[roleFilterType]!!.setBackgroundResource(roleDrawableOnMap[roleFilterType]!!)
+    }
+
+    private fun clearGameButtonBackground(){
+        val gameDrawableOffMap = mapOf(Pair(WARCRAFT, R.drawable.main_view_btn_warcraft_off),
+                Pair(OVERWATCH, R.drawable.main_view_btn_overwatch_off),
+                Pair(STARCRAFT, R.drawable.main_view_btn_starcraft_off),
+                Pair(DIABLO, R.drawable.main_view_btn_diablo_off),
+                Pair(OTHER, R.drawable.main_view_btn_retro_off))
+        gameButtonMap.forEach{
+            it.value.setBackgroundResource(gameDrawableOffMap[it.key]!!)
+        }
+    }
+
+    private fun setGameButtonActiveBackground(roleFilterType: String) {
+        val gameDrawableOnMap = mapOf(Pair(WARCRAFT, R.drawable.main_view_btn_warcraft_on),
+                Pair(OVERWATCH, R.drawable.main_view_btn_overwatch_on),
+                Pair(STARCRAFT, R.drawable.main_view_btn_starcraft_on),
+                Pair(DIABLO, R.drawable.main_view_btn_diablo_on),
+                Pair(OTHER, R.drawable.main_view_btn_retro_on))
+        gameButtonMap[roleFilterType]!!.setBackgroundResource(gameDrawableOnMap[roleFilterType]!!)
+    }
+
+    private fun enableFilterButtons(){
+        gameButtonMap.forEach{
+            it.value.isClickable = true
+        }
+        roleButtonMap.forEach{
+            it.value.isClickable = true
         }
     }
 
     private fun disableFilterButtons(){
-        val gameButtons = arrayOf(ib_warcraft, ib_diablo, ib_overwatch, ib_starcraft, ib_retro)
-        val roleButtons = arrayOf(ib_warrior, ib_assassin, ib_specialist, ib_support)
-        gameButtons.forEach{
-            it.isClickable = false
+        gameButtonMap.forEach{
+            it.value.isClickable = false
         }
-        roleButtons.forEach{
-            it.isClickable = false
-        }
-    }
-
-    private fun setGameButtonBackground(position: Int) {
-        val gameButtons = arrayOf(ib_warcraft, ib_diablo, ib_overwatch, ib_starcraft, ib_retro)
-        val onDrawables = arrayOf(R.drawable.main_view_btn_warcraft_on,
-                R.drawable.main_view_btn_diablo_on,
-                R.drawable.main_view_btn_overwatch_on,
-                R.drawable.main_view_btn_starcraft_on,
-                R.drawable.main_view_btn_retro_on)
-        val offDrawables = arrayOf(R.drawable.main_view_btn_warcraft_off,
-                R.drawable.main_view_btn_diablo_off,
-                R.drawable.main_view_btn_overwatch_off,
-                R.drawable.main_view_btn_starcraft_off,
-                R.drawable.main_view_btn_retro_off)
-        gameButtons.forEachIndexed {
-            index, value ->
-            run {
-                if (index == position) value.setBackgroundResource(onDrawables[index])
-                else value.setBackgroundResource(offDrawables[index])
-            }
-        }
-    }
-
-    private fun setRoleButtonBackground(position: Int) {
-        val roleButtons = arrayOf(ib_warrior, ib_assassin, ib_specialist, ib_support)
-        val onDrawables = arrayOf(R.drawable.main_view_btn_warrior_on,
-                R.drawable.main_view_btn_assassin_on,
-                R.drawable.main_view_btn_specialist_on,
-                R.drawable.main_view_btn_support_on)
-        val offDrawables = arrayOf(R.drawable.main_view_btn_warrior_off,
-                R.drawable.main_view_btn_assassin_off,
-                R.drawable.main_view_btn_specialist_off,
-                R.drawable.main_view_btn_support_off)
-        roleButtons.forEachIndexed {
-            index, value ->
-            run {
-                if (index == position) value.setBackgroundResource(onDrawables[index])
-                else value.setBackgroundResource(offDrawables[index])
-            }
+        roleButtonMap.forEach{
+            it.value.isClickable = false
         }
     }
 
