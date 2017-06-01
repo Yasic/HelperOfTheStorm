@@ -105,6 +105,9 @@ class MoreListAdapter(val items: Array<String>, val itemClick: OnItemClickListen
                 ApplicationModel.instance().resources.getString(R.string.about_activity_title) -> {
                     icon.setBackgroundResource(R.drawable.ic_about_24dp)
                 }
+                ApplicationModel.instance().resources.getString(R.string.update_check_title) -> {
+                    icon.setBackgroundResource(R.drawable.ic_update_24dp)
+                }
             }
             liItemView.setOnClickListener { itemClick(item) }
         }
@@ -112,7 +115,6 @@ class MoreListAdapter(val items: Array<String>, val itemClick: OnItemClickListen
 
     interface OnItemClickListener{
         operator fun invoke(title: String){
-
         }
     }
 }

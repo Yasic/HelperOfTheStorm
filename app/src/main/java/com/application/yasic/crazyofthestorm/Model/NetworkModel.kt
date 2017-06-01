@@ -66,4 +66,12 @@ class NetworkModel() {
             Picasso.with(view.context).load(R.drawable.icon_holder).into(view)
         }
     }
+
+    fun checkApplicationVersion():Boolean{
+        val manager = ApplicationModel.instance().packageManager
+        val info = manager.getPackageInfo(ApplicationModel.instance().packageName, 0)
+        val currentVersion = info.versionName
+        val latestVersion = WannaGet("heroapp/checkversion").run()
+        return latestVersion != currentVersion
+    }
 }
